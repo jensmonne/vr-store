@@ -1,0 +1,8 @@
+player skin options
+offline mode option
+small setup guide
+
+for guide:
+
+Make sure to have mirror installed.
+make sure the connection scene is set to position 0 in the build and your online scene is set to 1

@@ -39,8 +39,11 @@ namespace BNG
         {   
             // load saved player name and load it menu input and local player data
             string playerName = (string)LoadPlayerPref("PlayerName", "Unknown");
-            localPlayerData.PlayerName = playerName;
-            playerNameInputField.text = playerName;
+            if (playerName != "Unknown")
+            {
+                localPlayerData.PlayerName = playerName;
+                playerNameInputField.text = playerName;
+            }
             int playerPrefab = (int)LoadPlayerPref("PrefabIndex", 0);
             localPlayerData.playerPrefabIndex = playerPrefab;
             int playerBodyTexture = (int)LoadPlayerPref("BodyTextureIndex", 0);

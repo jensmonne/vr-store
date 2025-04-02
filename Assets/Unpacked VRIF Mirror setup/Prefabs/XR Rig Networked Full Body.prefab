@@ -7439,7 +7439,7 @@ GameObject:
   - component: {fileID: 7894841360383652579}
   - component: {fileID: 7894841360383652590}
   - component: {fileID: 2226960964634723372}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: XR Rig Networked Full Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7996,7 +7996,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1845
+    m_Bits: 4294967295
   m_RenderingPath: 1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -9280,7 +9280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6454832214670694739
 Transform:
   m_ObjectHideFlags: 0
@@ -13569,7 +13569,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7894841358502665547
 Transform:
   m_ObjectHideFlags: 0

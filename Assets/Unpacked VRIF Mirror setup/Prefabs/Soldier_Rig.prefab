@@ -2459,7 +2459,7 @@ GameObject:
   - component: {fileID: 645640458027183857}
   - component: {fileID: 6457971901704967013}
   - component: {fileID: 6457971901704966937}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Soldier_Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3524,7 +3524,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6457971902739909258}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0000000034073926, y: 0.000000044703473, z: 0.000000044583167, w: 1}
+  m_LocalRotation: {x: 0.0000000034073926, y: 0.000000044703473, z: 0.000000044583167,
+    w: 1}
   m_LocalPosition: {x: -0.009, y: -0, z: 0.002}
   m_LocalScale: {x: 0.8777616, y: 0.89099663, z: 1.0213807}
   m_ConstrainProportionsScale: 0

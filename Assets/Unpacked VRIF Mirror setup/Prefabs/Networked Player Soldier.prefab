@@ -6947,7 +6947,7 @@ GameObject:
   - component: {fileID: 8267526884335047635}
   - component: {fileID: 3147365823356487158}
   - component: {fileID: 1443572748471153100}
-  m_Layer: 11
+  m_Layer: 9
   m_Name: Networked Player Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}

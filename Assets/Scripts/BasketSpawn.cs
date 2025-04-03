@@ -15,6 +15,8 @@ public class BasketSpawn : MonoBehaviour
     {
         if (!other.CompareTag("PlayerHand")) return;
         
+        Debug.Log(other.name);
+        
         handGrabber = other.GetComponentInParent<Grabber>();
 
         if (handGrabber == null) return;

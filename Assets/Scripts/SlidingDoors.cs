@@ -6,7 +6,7 @@ public class SlidingDoors : MonoBehaviour
 {
     [SerializeField] private Transform leftDoor;
     [SerializeField] private Transform rightDoor;
-    private float slideDistance = 2f;
+    private float slideDistance = 1.1f;
     private float slideSpeed = 2f;
     
     private Vector3 leftClosedPos;
@@ -20,8 +20,8 @@ public class SlidingDoors : MonoBehaviour
         leftClosedPos = leftDoor.localPosition;
         rightClosedPos = rightDoor.localPosition;
 
-        leftOpenPos = leftClosedPos + Vector3.forward * slideDistance;
-        rightOpenPos = rightClosedPos + Vector3.back * slideDistance;
+        leftOpenPos = leftClosedPos + Vector3.right * slideDistance;
+        rightOpenPos = rightClosedPos + Vector3.left * slideDistance;
     }
 
     private void OnTriggerEnter(Collider other)

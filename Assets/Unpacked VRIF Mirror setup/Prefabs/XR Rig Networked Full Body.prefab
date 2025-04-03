@@ -389,7 +389,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282409338992888614}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 855d72b36bb9d904e80e3c9e587f3d8c, type: 3}
   m_Name: 
@@ -489,7 +489,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282409338992888614}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -586,7 +586,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 282409338992888614}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ce69dd88838504c4c988eb0d63cad28a, type: 3}
   m_Name: 
@@ -2047,7 +2047,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3570863145006600713
 Transform:
   m_ObjectHideFlags: 0
@@ -7552,7 +7552,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4313148249130439269}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8ef3fb08709aab4cb6e18ac7630ea73, type: 3}
   m_Name: 
@@ -13167,7 +13167,7 @@ GameObject:
   - component: {fileID: 889856223414874507}
   m_Layer: 2
   m_Name: Grabber
-  m_TagString: Untagged
+  m_TagString: PlayerHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14988,7 +14988,7 @@ GameObject:
   - component: {fileID: 2718177051186725732}
   m_Layer: 2
   m_Name: Grabber
-  m_TagString: Untagged
+  m_TagString: PlayerHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15594,6 +15594,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2767022562401594829, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3815999999206234014, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
         type: 3}
       propertyPath: grabber
@@ -15611,6 +15616,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 965c46e1afbab684385a4961e3d95f2c,
         type: 2}
+    - target: {fileID: 3924964187719560154, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3925051075340635156, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4026682327158492198, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
         type: 3}
       propertyPath: m_Enabled
@@ -15666,6 +15681,11 @@ PrefabInstance:
       propertyPath: FollowRightController
       value: 
       objectReference: {fileID: 1159837149841880377}
+    - target: {fileID: 6457971902901747961, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6457971903006116970, guid: b7fd3051b031eb54d93f1e6771f3f5b9,
         type: 3}
       propertyPath: Pose1

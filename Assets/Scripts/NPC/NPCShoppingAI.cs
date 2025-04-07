@@ -8,10 +8,10 @@ public class NPCShoppingAI : MonoBehaviour
     private NPCShoppingList shoppingList;
     private NPCState state;
     
-    private List<Transform> shelfLocations;
-    private List<Transform> checkoutPoints; // Need to make this more of a queue thing so npc's auto pick the least used checkout
-    private Transform enterPoint;
-    private Transform exitPoint;
+    [SerializeField] private List<Transform> shelfLocations;
+    [SerializeField] private List<Transform> checkoutPoints; // Need to make this more of a queue thing so npc's auto pick the least used checkout
+    [SerializeField] private Transform enterExitPoint;
+    [SerializeField] private NPCShoppingManager shoppingManager;
 
     private Transform chosenCheckout;
     private int currentTargetIndex = 0;
@@ -20,6 +20,7 @@ public class NPCShoppingAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         shoppingList = GetComponent<NPCShoppingList>();
+        enterExitPoint = shoppingManager.enterExitPoint;
 
         if (shoppingList == null || shoppingList.GetShoppingList().Count == 0)
         {
@@ -28,7 +29,7 @@ public class NPCShoppingAI : MonoBehaviour
         }
 
         state = NPCState.Entering;
-        agent.SetDestination(enterPoint.position);
+        agent.SetDestination(enterExitPoint.position);
     }
 
     private void Update()
@@ -128,6 +129,6 @@ public class NPCShoppingAI : MonoBehaviour
     private void GoToExit()
     {
         state = NPCState.Exiting;
-        agent.SetDestination(exitPoint.position);
+        agent.SetDestination(enterExitPoint.position);
     }
 }

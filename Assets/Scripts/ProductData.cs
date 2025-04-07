@@ -7,4 +7,5 @@ public class ProductData : ScriptableObject
     public float price;
     public int size;
     public int maxQuantity;
+    public int ProductType;
 }

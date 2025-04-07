@@ -84,14 +84,14 @@ namespace BNG
             
 
             // spawn the starting character, this will spawn the last used character as the index is saved on change
-            if (avatarPrefabSets.Count > 0)
-            {
-               StartCoroutine(LoadLocalPlayerDataAvatar());
-            }
-            else
-            {
-                Debug.LogError("No avatar prefab found");
-            }
+            // if (avatarPrefabSets.Count > 0)
+            // {
+            //    StartCoroutine(LoadLocalPlayerDataAvatar());
+            // }
+            // else
+            // {
+            //     Debug.LogError("No avatar prefab found");
+            // }
         }
 
         IEnumerator LoadLocalPlayerDataAvatar()

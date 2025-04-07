@@ -17,7 +17,9 @@ namespace BNG {
         // Cache the camera transform if we want to look at it in Update
         Transform camTransform;
 
-        LocalPlayerData localPlayerData;
+        //LocalPlayerData localPlayerData;
+
+        private string localPlayerData;
         string settingsPlayerName;
 
         [SyncVar(hook = nameof(SetNetworkPlayerName))]
@@ -26,7 +28,9 @@ namespace BNG {
         void Start() {
             if (isOwned) {
                 // Retrieve our player name from local data
-                localPlayerData = LocalPlayerData.Instance;
+                //localPlayerData = LocalPlayerData.Instance;
+                
+                localPlayerData = PlayerPrefs.GetString("PlayerName", "Unknown");
 
                 // disable the player label over the local player
                 PlayerInfoCanvas.enabled = false;
@@ -44,9 +48,15 @@ namespace BNG {
         public void CheckNameUpdate() {
             if (isOwned && localPlayerData != null) {
                 // If name has changed in local data, send to network so we can update our label
-                if (settingsPlayerName != localPlayerData.PlayerName) {
+                /*if (settingsPlayerName != localPlayerData.PlayerName) {
 
                     settingsPlayerName = localPlayerData.PlayerName;
+
+                    CmdSetNetworkPlayerName(settingsPlayerName);
+                }*/
+                
+                if (settingsPlayerName != localPlayerData) {
+                    settingsPlayerName = localPlayerData;
 
                     CmdSetNetworkPlayerName(settingsPlayerName);
                 }

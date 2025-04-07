@@ -10,6 +10,7 @@ public class NPCShoppingManager : MonoBehaviour
     private List<Transform> shelfLocations = new List<Transform>();
     private List<Transform> checkoutPoints = new List<Transform>();
     private Dictionary<Transform, int> checkoutQueue = new Dictionary<Transform, int>();
+    public Transform enterExitPoint;
 
     private void Awake()
     {

@@ -101,6 +101,7 @@ namespace Utp
 			{
 				relayJoinCode = joinCode;
 				Debug.LogError($"Relay JoinCode: {joinCode}");
+				PlayerPrefs.SetString("RoomCode", joinCode);
 				StartHost();
 			},
 			() =>

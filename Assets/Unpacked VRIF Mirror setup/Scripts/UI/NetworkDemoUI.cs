@@ -31,7 +31,7 @@ namespace BNG {
         private string relayJoinCode;
         private bool isAuthenticated = false;
         private bool isAuthenticating = false;
-
+        
         private async void Start()
         {
             await EnsureAuthentication();
@@ -72,7 +72,7 @@ namespace BNG {
         {
             Debug.Log("OnStartServer");
             DisplayText.text = "Server started.\n";
-            ShowDisconnectButton();
+            HideConnectionUI();
         }
 
         public override void OnStartClient()
@@ -80,7 +80,7 @@ namespace BNG {
             Debug.Log("OnStartClient");
             ClientConnected = true;
             DisplayText.text += "Client started.\n";
-            ShowDisconnectButton();
+            HideConnectionUI();
         }
 
         public async void OnHostButton()
@@ -88,6 +88,17 @@ namespace BNG {
             Debug.Log("Host Button clicked");
             try
             {
+                DisplayText.text = "Attempting to host server... \n";
+                
+                string playerName = PlayerNameInput.text;
+                if (string.IsNullOrEmpty(playerName))
+                {
+                    DisplayText.text = "Please enter your player name.\n";
+                    return;
+                }
+                
+                PlayerPrefs.SetString("PlayerName", playerName);
+                
                 await EnsureAuthentication();
                 if (!isAuthenticated)
                 {
@@ -97,10 +108,9 @@ namespace BNG {
 
                 Debug.Log("Authentication successful");
 
+                HideConnectionUI();
+                
                 networkManager.StartRelayHost(4);
-
-                // SaveLocalPlayersData();
-                ShowDisconnectButton();
             }
             catch (Exception e)
             {
@@ -122,11 +132,22 @@ namespace BNG {
                 DisplayText.text = "Please enter a valid join code.\n";
                 return;
             }
+            
+            PlayerPrefs.SetString("RoomCode", joinCode);
+            
+            string playerName = PlayerNameInput.text;
+            
+            if (string.IsNullOrEmpty(playerName))
+            {
+                DisplayText.text = "Please enter your player name.\n";
+                return;
+            }
+            
+            PlayerPrefs.SetString("PlayerName", playerName);
+            
+            HideConnectionUI();
 
             networkManager.JoinRelayServer(joinCode);
-
-            // SaveLocalPlayersData();
-            ShowDisconnectButton();
         }
 
         public void OnDisconnectButton()
@@ -145,12 +166,12 @@ namespace BNG {
                 networkManager.StopHost();
             }
 
-            HideDisconnectButton();
+            ShowConnectionUI();
         }
 
         public void OnOfflineButton()
         {
-            string sceneName = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(1));
+            string sceneName = System.IO.Path.GetFileNameWithoutExtension(SceneUtility.GetScenePathByBuildIndex(2));
             sceneLoader.LoadScene(sceneName);
         }
 
@@ -159,37 +180,25 @@ namespace BNG {
             Debug.Log("OnStopClient");
             DisplayText.text += "Client disconnected.\n";
             ClientConnected = false;
-            HideDisconnectButton();
+            HideConnectionUI();
         }
 
-        public void ShowDisconnectButton()
+        private void ShowConnectionUI()
         {
-            if (DisconnectButton) DisconnectButton.SetActive(true);
-            if (ConnectButton) ConnectButton.SetActive(false);
-            if (HostButton) HostButton.SetActive(false);
-
+            if (DisconnectButton) DisconnectButton.SetActive(false);
             foreach (GameObject go in DisableGameObjects)
             {
                 go.SetActive(false);
             }
         }
 
-        public void HideDisconnectButton()
+        private void HideConnectionUI()
         {
-            if (DisconnectButton) DisconnectButton.SetActive(false);
-            if (ConnectButton) ConnectButton.SetActive(true);
-            if (HostButton) HostButton.SetActive(true);
-        }
-
-        public void SaveLocalPlayersData()
-        {
-            SaveLoadData saveLoadData = SaveLoadData.Instance;
-            LocalPlayerData localPlayerData = LocalPlayerData.Instance;
-            localPlayerData.SetPlayerName(PlayerNameInput.text);
-            saveLoadData.SavePlayerPref("PlayerName", localPlayerData.PlayerName);
-            saveLoadData.SavePlayerPref("PrefabIndex", localPlayerData.playerPrefabIndex);
-            saveLoadData.SavePlayerPref("BodyTextureIndex", localPlayerData.bodyTextureIndex);
-            saveLoadData.SavePlayerPref("PropTextureIndex", localPlayerData.propTextureIndex);
+            if (DisconnectButton) DisconnectButton.SetActive(true);
+            foreach (GameObject go in DisableGameObjects)
+            {
+                go.SetActive(true);
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ public class BasketSpawn : MonoBehaviour
 
         if (basketGrabbable == null) return;
         
-        handGrabber.GrabGrabbable(basketGrabbable);
+        handGrabber.GrabGrabbable(currentBasket.GetComponent<Grabbable>());
         StartCoroutine(WaitForBasketRelease(basketGrabbable));
     }
     

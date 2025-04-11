@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -6000634280609681594}
   - component: {fileID: -2640218258301567912}
   - component: {fileID: 1484024312029841986}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: ToiletPaper
   m_TagString: Product
   m_Icon: {fileID: 0}

@@ -13,6 +13,7 @@ public class IndividualShelfManager : MonoBehaviour
     private ControllerHand detectedHand;
     
     private int maxProductsPerRow = 13;
+    private int currentMaxProductsPerRow;
     private int maxRows = 3;
     
     private float smallProductSpacing = 0.12f;
@@ -39,7 +40,7 @@ public class IndividualShelfManager : MonoBehaviour
     {
         if (isInitialized) return;
 
-        if (bottomShelf) maxRows++; 
+        if (bottomShelf) maxRows++;
 
         for (int row = 0; row < maxRows; row++)
         {
@@ -132,6 +133,20 @@ public class IndividualShelfManager : MonoBehaviour
             shelfProductType = productType;
             ProductHolder productData = product.GetComponent<ProductHolder>();
             SetPriceTagPrice(productData.productData.price);
+
+            availableSpots.Clear();
+            currentMaxProductsPerRow = (int)GetMaxProductsPerRow(size);
+            int totalRows = bottomShelf ? maxRows + 1 : maxRows;
+
+            for (int row = 0; row < totalRows; row++)
+            {
+                for (int col = 0; col < currentMaxProductsPerRow; col++)
+                {
+                    availableSpots.Add(new Vector2Int(col, row));
+                }
+            }
+
+            maxSpots = availableSpots.Count;
         }
 
         if (availableSpots.Count == 0)
@@ -146,10 +161,11 @@ public class IndividualShelfManager : MonoBehaviour
         VRUtils.Instance.Log($"Available spots count after placing: {availableSpots.Count}");
     
         float spacing = GetSpacing(size);
-        Vector3 newPosition = shelfFillPoint.transform.position + new Vector3(spot.x * spacing, 0.1f, spot.y * rowDepthOffset);
+        //Vector3 newPosition = shelfFillPoint.transform.position + new Vector3(spot.x * spacing, 0.1f, spot.y * rowDepthOffset);
     
-        product.transform.position = newPosition;
-        product.transform.rotation = Quaternion.identity;
+        product.transform.SetParent(shelfFillPoint.transform);
+        product.transform.localPosition = new Vector3(spot.x * spacing, 0.1f, spot.y * rowDepthOffset);
+        product.transform.localRotation = Quaternion.identity;
 
         product.GetComponent<Rigidbody>().isKinematic = true;
     
@@ -167,6 +183,16 @@ public class IndividualShelfManager : MonoBehaviour
             2 => mediumProductSpacing,
             3 => largeProductSpacing,
             _ => smallProductSpacing,
+        };
+    }
+    private float GetMaxProductsPerRow(int size)
+    {
+        return size switch
+        {
+            1 => 13,
+            2 => 6,
+            3 => 3,
+            _ => 13,
         };
     }
     

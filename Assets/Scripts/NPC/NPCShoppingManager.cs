@@ -14,10 +14,10 @@ public class NPCShoppingManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null) Instance = this; else Destroy(gameObject);
     }
     
-    private void Start()
+    public void OnStart()
     {
         FindShoppingLocations();
     }
@@ -31,6 +31,8 @@ public class NPCShoppingManager : MonoBehaviour
         {
             if (!checkoutQueue.ContainsKey(checkout)) checkoutQueue[checkout] = 0;
         }
+
+        Debug.Log($"Found {shelfLocations.Count} shelf points and {checkoutPoints.Count} checkout points.");
     }
     
     public Transform GetNextShelf(int index)
@@ -61,24 +63,35 @@ public class NPCShoppingManager : MonoBehaviour
 
     public List<ProductData> GetRandomShoppingList()
     {
-        List<ProductData> ShoppingList = new List<ProductData>();
-        int TotalProducts = Random.Range(1, availableProducts.Count);
-        
+        List<ProductData> shoppingList = new List<ProductData>();
+
+        if (availableProducts == null || availableProducts.Count == 0)
+        {
+            Debug.LogWarning("No available products to generate shopping list.");
+            return shoppingList;
+        }
+
+        int maxProductCount = Mathf.Min(availableProducts.Count, 5);
+        int totalProductTypes = Random.Range(1, maxProductCount + 1);
+
         List<ProductData> shuffledProducts = new List<ProductData>(availableProducts);
         shuffledProducts.Shuffle();
 
-        for (int i = 0; i < TotalProducts; i++)
+        for (int i = 0; i < totalProductTypes; i++)
         {
             ProductData selectedProduct = shuffledProducts[i];
+
             int quantity = Random.Range(1, selectedProduct.maxQuantity + 1);
-            
             for (int j = 0; j < quantity; j++)
             {
-                ShoppingList.Add(selectedProduct);
+                shoppingList.Add(selectedProduct);
             }
         }
-        return ShoppingList;
+
+        Debug.Log($"Generated shopping list with {shoppingList.Count} items.");
+        return shoppingList;
     }
+
 }
 
 public static class ListExtensions

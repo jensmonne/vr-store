@@ -13,6 +13,7 @@ TagManager:
   - PriceTag
   - NPCQueuePoint
   - Basket
+  - EnterExitPoint
   layers:
   - Default
   - TransparentFX
@@ -21,11 +22,11 @@ TagManager:
   - Water
   - UI
   - Pushable
-  - 
+  - NonGrabbableCollided
   - Restricted
   - Player
   - Grabbable
-  - 
+  - Product
   - 
   - 
   - 

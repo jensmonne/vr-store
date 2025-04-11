@@ -7,66 +7,79 @@ public class NPCShoppingAI : MonoBehaviour
     private NavMeshAgent agent;
     private NPCShoppingList shoppingList;
     private NPCState state;
-    
-    [SerializeField] private List<Transform> shelfLocations;
-    [SerializeField] private List<Transform> checkoutPoints; // Need to make this more of a queue thing so npc's auto pick the least used checkout
-    [SerializeField] private Transform enterExitPoint;
-    [SerializeField] private NPCShoppingManager shoppingManager;
 
+    [SerializeField] private List<Transform> shelfLocations;
+    private Transform enterExitPoint;
     private Transform chosenCheckout;
     private int currentTargetIndex = 0;
+    [SerializeField] private EnterExitPoint enterExit;
+
+    [SerializeField] private NPCShoppingManager shoppingManager;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         shoppingList = GetComponent<NPCShoppingList>();
-        enterExitPoint = shoppingManager.enterExitPoint;
+        shoppingManager = NPCShoppingManager.Instance;
+        enterExitPoint = GameObject.FindGameObjectWithTag("EnterExitPoint").transform;
+        enterExit = enterExitPoint.GetComponent<EnterExitPoint>();
 
         if (shoppingList == null || shoppingList.GetShoppingList().Count == 0)
         {
-            Debug.LogError("NPC has no shopping list!");
+            Debug.LogError($"{name} has no shopping list!");
             return;
         }
 
+        shelfLocations = new List<Transform>();
+        for (int i = 0; i < shoppingList.GetShoppingList().Count; i++)
+        {
+            var shelf = shoppingManager.GetNextShelf(i);
+            if (shelf != null) shelfLocations.Add(shelf);
+        }
+
+        enterExitPoint = shoppingManager.enterExitPoint;
+
         state = NPCState.Entering;
+        Debug.Log($"{name} is entering the store.");
         agent.SetDestination(enterExitPoint.position);
     }
 
     private void Update()
     {
-        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+        if (agent.pathPending) return;
+
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
             switch (state)
             {
                 case NPCState.Entering:
-                    MoveToNextShelf();
+                    Debug.Log($"{name} entered the store.");
+                    state = NPCState.GettingBasket;
+                    Invoke(nameof(GetBasketOrCart), 1f);
                     break;
-                
-                case NPCState.GettingBasket:
-                    GetBasketOrCart();
-                    break;
-                
+
                 case NPCState.WalkingToShelf:
-                    PickProduct();
+                    state = NPCState.PickingProduct;
+                    Invoke(nameof(PickProduct), 1f);
                     break;
-                
+
                 case NPCState.PickingProduct:
                     MoveToNextShelf();
                     break;
-                
+
                 case NPCState.CheckoutQueueing:
-                    ProcessCheckout();
-                    break;
-                
-                case NPCState.ScanningProducts:
-                    PayForItems();
+                    state = NPCState.ScanningProducts;
+                    Debug.Log($"{name} reached checkout and is scanning products.");
+                    Invoke(nameof(ProcessCheckout), 2f);
                     break;
 
                 case NPCState.Paying:
-                    GoToExit();
+                    Invoke(nameof(GoToExit), 1.5f);
                     break;
 
                 case NPCState.Exiting:
+                    Debug.Log($"{name} is exiting.");
+                    enterExit.currentDestroyedNpcAmount--;
                     Destroy(gameObject);
                     break;
             }
@@ -75,7 +88,8 @@ public class NPCShoppingAI : MonoBehaviour
 
     private void GetBasketOrCart()
     {
-        
+        Debug.Log($"{name} picked up a basket.");
+        MoveToNextShelf();
     }
 
     private void MoveToNextShelf()
@@ -83,51 +97,97 @@ public class NPCShoppingAI : MonoBehaviour
         if (currentTargetIndex < shelfLocations.Count)
         {
             state = NPCState.WalkingToShelf;
-            agent.SetDestination(shelfLocations[currentTargetIndex].position);
+            Transform nextShelf = shelfLocations[currentTargetIndex];
+            agent.SetDestination(nextShelf.position);
+            Debug.Log($"{name} moving to shelf {currentTargetIndex}.");
             currentTargetIndex++;
         }
         else
         {
-            state = NPCState.WalkingToCheckout;
             JoinCheckoutQueue();
         }
     }
 
     private void PickProduct()
     {
-        Debug.Log($"{gameObject.name} picked an item.");
-        state = NPCState.PickingProduct;
+        // Get the product the NPC is supposed to pick
+        if (currentTargetIndex < shelfLocations.Count)
+        {
+            Transform nextShelf = shelfLocations[currentTargetIndex];
+            if (nextShelf != null)
+            {
+                Debug.Log($"{name} picked an item from shelf {currentTargetIndex}.");
+                // If product is missing or unavailable at the shelf, log a warning and move on
+                if (!IsProductAvailable(nextShelf))
+                {
+                    Debug.LogWarning($"{name} couldn't find the item on shelf {currentTargetIndex}. Moving to the next product.");
+                    MoveToNextShelf();  // Move to the next shelf for the next product
+                    return;
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"{name} found a null shelf at index {currentTargetIndex}. Moving on.");
+                MoveToNextShelf();  // Move to the next shelf
+                return;
+            }
+        }
+        else
+        {
+            JoinCheckoutQueue();  // If all products are picked, proceed to checkout
+        }
     }
+
+    private bool IsProductAvailable(Transform shelf)
+    {
+        // Add logic to check if the product is available on the shelf
+        // This could be based on whether there's any product object at the shelf, or other conditions
+        // For example, checking if the shelf has products tagged as "Product" or some specific component
     
+        var productObjects = shelf.GetComponentsInChildren<Transform>(); // Example check, you can modify it for your scenario
+
+        if (productObjects.Length == 0)  // If no products found, consider the item as unavailable
+        {
+            return false;
+        }
+
+        return true;  // If there are product objects, consider the item as available
+    }
+
+
     private void JoinCheckoutQueue()
     {
-        chosenCheckout = GetLeastBusyCheckout();
-        state = NPCState.CheckoutQueueing;
-        agent.SetDestination(chosenCheckout.position);
+        chosenCheckout = shoppingManager.GetLeastBusyCheckout();
+        if (chosenCheckout != null)
+        {
+            shoppingManager.JoinCheckoutQueue(chosenCheckout);
+            agent.SetDestination(chosenCheckout.position);
+            Debug.Log($"{name} joining queue at {chosenCheckout.name}.");
+            state = NPCState.CheckoutQueueing;
+        }
+        else
+        {
+            Debug.LogWarning($"{name} couldn't find a checkout to join!");
+        }
     }
-    
-    private Transform GetLeastBusyCheckout()
-    {
-        if (checkoutPoints.Count == 0) return null;
-        return checkoutPoints[Random.Range(0, checkoutPoints.Count)]; // TODO: Implement a real queue system
-    }
-    
+
     private void ProcessCheckout()
     {
-        Debug.Log($"{gameObject.name} is scanning products.");
-        state = NPCState.ScanningProducts;
+        Debug.Log($"{name} is processing checkout...");
+        state = NPCState.Paying;
         Invoke(nameof(PayForItems), 2f);
     }
 
     private void PayForItems()
     {
-        Debug.Log($"{gameObject.name} is paying.");
+        Debug.Log($"{name} paid for their items.");
+        shoppingManager.LeaveCheckoutQueue(chosenCheckout);
         state = NPCState.Paying;
-        Invoke(nameof(GoToExit), 2f);
     }
 
     private void GoToExit()
     {
+        Debug.Log($"{name} is leaving the store.");
         state = NPCState.Exiting;
         agent.SetDestination(enterExitPoint.position);
     }

@@ -21,6 +21,8 @@ public class Basket : MonoBehaviour
 
     IEnumerator RemoveFromRecentlyExitedProducts(GameObject product)
     {
+        product.GetComponent<Rigidbody>().isKinematic = false;
+        
         yield return new WaitForSeconds(reEnterTime); 
         recentlyExitedProducts.Remove(product);
     }

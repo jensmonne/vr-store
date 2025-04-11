@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 2834393938513531717}
   - component: {fileID: 8640406204578925551}
   - component: {fileID: 183784641578025095}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Banana
   m_TagString: Product
   m_Icon: {fileID: 0}
@@ -224,8 +224,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.27447733, y: 0.16448091, z: 0.39552218}
-  m_Center: {x: 0, y: 0.082240455, z: 0}
+  m_Size: {x: 0.24409401, y: 0.11471811, z: 0.39552218}
+  m_Center: {x: -0.003208518, y: 0.08977716, z: 0}
 --- !u!114 &674847105701916872
 MonoBehaviour:
   m_ObjectHideFlags: 0
